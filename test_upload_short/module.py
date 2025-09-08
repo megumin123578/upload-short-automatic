@@ -156,6 +156,8 @@ def split_dir(dir):
 
 
 def choose_file(folder_dir, file_name):
+        
+        time.sleep(2)
 
         x, y= 1626,56
         print(f'Move to {x,y}')
@@ -192,6 +194,14 @@ def choose_file(folder_dir, file_name):
         ##########################################################################
     
 def ad_suitability():
+
+    x,y = random.uniform(1369,1401), random.uniform(940,955)
+    print(f'Move to {x,y}')
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+    random_delay()
+    pyautogui.click()
+
+
     random_delay()
     #ad suitability
     x, y =1434, 399
@@ -221,7 +231,6 @@ def ad_suitability():
     time.sleep(random.uniform(3,3.5))
 
     x,y = random.uniform(1369,1401), random.uniform(940,955)
-
     print(f'Move to {x,y}')
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
     random_delay()
@@ -238,7 +247,7 @@ def get_tag_name(html):
 def select_channel(channel_tag, total_channel):
     #go to def tool
 
-    time.sleep(2)
+    random_delay()
     first_channel = [453,287]
     x,y = first_channel[0], first_channel[1]
     
@@ -246,7 +255,7 @@ def select_channel(channel_tag, total_channel):
     for _ in range(total_channel):
 
         x += 300 #move x to seccond col
-        pyautogui.hotkey('ctrl','shift','c')
+        pyautogui.hotkey('ctrl','shift','c') # == f12
         time.sleep(1)
         random_delay(1,2 )
         print(f"Move to ({x}, {y})")
@@ -289,46 +298,6 @@ def select_channel(channel_tag, total_channel):
         if tag_name == channel_tag:
             return x+275,y
         
-def add_endscreen(level):
-    x,y = 1345,545
-    if level == 4 or level == 2:
-        y += 210
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    pyautogui.click()
-    
-    time.sleep(2)
-
-    x,y = 625,385
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    pyautogui.click()
-
-    #modify
-    x,y = 1400, 790
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    pyautogui.mouseDown()
-    pyautogui.moveTo(x+50, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    pyautogui.mouseUp()
-
-    x,y = 1400, 820
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    pyautogui.mouseDown()
-    pyautogui.moveTo(x+50, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    pyautogui.mouseUp()
-
-    x,y = 1400, 757
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    pyautogui.mouseDown()
-    pyautogui.moveTo(x+50, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    pyautogui.mouseUp()
-
-    #save
-    x,y = 1385,230
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    pyautogui.click()
-    time.sleep(1)
 
 def random_mouse(so_vong=None, ban_kinh=None, toc_do=0.01, huong=None, huong_xoan='vao'):
 
@@ -374,14 +343,13 @@ def upload_vid_to_right_channel(tag_name):
     pyautogui.click()
     random_delay()  
     random_mouse()
-
-    time.sleep(5)
-    
+    random_delay()
 
     x_channel, y_channel = select_channel(tag_name,28) ###select_channel###
     #turn off dev tool and select right channel
     pyautogui.hotkey('f12')
     print(f"Move to ({x_channel}, {y_channel})")
+    random_delay()
     pyautogui.moveTo(x_channel, y_channel, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
     pyautogui.click()
     
@@ -398,10 +366,10 @@ def upload_vid_to_right_channel(tag_name):
     print(f"Move to ({x}, {y})")
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
     pyautogui.click()
-    random_delay(4,5)
+    random_delay(6)
 
     
-    location = pyautogui.locateOnScreen("img_data/yt_studio.png", confidence=0.8)
+    location = pyautogui.locateOnScreen("img_data/yt_studio.png", confidence=0.7)
     if location:
         left, top, width, height = location
         x = random.randint(left, left + width -5)
@@ -411,7 +379,7 @@ def upload_vid_to_right_channel(tag_name):
         pyautogui.click()
     random_delay()
 
-    time.sleep(5)
+    time.sleep(6)
 
     location = pyautogui.locateOnScreen("img_data/create_button.png", confidence=0.7)
     if location:
@@ -459,9 +427,11 @@ def insert_title_and_description(title, description):
     random_delay()
     pyautogui.hotkey("ctrl", "a")
     random_delay(0.4, 0.5)
-    pyautogui.hotkey("ctrl", "v")
+    if len(str(description)) > 5:
+        pyperclip.copy(str(description))
+        pyautogui.hotkey("ctrl", "v")
 
-def add_to_playlist():
+def add_to_playlist(numbers_of_playist):
     #scroll max
     time.sleep(2)
     x,y = 1434,478
@@ -483,9 +453,9 @@ def add_to_playlist():
     x,y = 560,400
     for _ in range(numbers_of_playist):
         print(f'Move to {x,y}')
-        time.sleep(random.uniform(1, 2))
+        time.sleep(random.uniform(0.5, 0.7))
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
-        random_delay()
+        random_delay(0.2,0.3)
         pyautogui.click()
         
         y+=32
@@ -494,4 +464,44 @@ def add_to_playlist():
     x,y = 881,742
     print(f'Move to {x,y}')
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
+    pyautogui.click()
+
+def go_to_visibility():
+    random_mouse()
+    #next
+    x,y = 1390, 960
+    print(f'Move to {x,y}')
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
+    pyautogui.click()
+    random_delay(1,2)
+    print(f'Move to {x,y}')
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
+    pyautogui.click()
+
+def related_vids():
+    random_delay()
+
+    x,y = random.uniform(1329,1361), random.uniform(473,493)
+    print(f'Move to {x,y}')
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+    random_delay()
+    pyautogui.click()
+
+    #tab until reach first video == 4 tabs
+    for _ in range(4):
+        pyautogui.hotkey('tab')
+        random_delay()
+
+    #random 10 newest vids 0,2
+    for _ in range(random.randint(0,10)):
+        random_delay()
+        pyautogui.hotkey('tab')
+    #select
+    pyautogui.hotkey('enter')
+    
+    #move to next setion
+    x,y = random.uniform(1369,1401), random.uniform(940,955)
+    print(f'Move to {x,y}')
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+    random_delay()
     pyautogui.click()

@@ -76,212 +76,14 @@ def main(sheet_idx):
 
             insert_title_and_description(title, description)
 
+            add_to_playlist(numbers_of_playist)
 
-   
+            ad_suitability()
 
-    #         #set for kids
-    #         if for_kids == 'Yes':
-    #             x,y = 540,692
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
-    #             pyautogui.click()
-    #         else:
-    #             x,y = 540,726
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
-    #             pyautogui.click()
-
-            
-    #         if level == 2:
-    #             #move to monetization
-    #             x,y = random.uniform(1366,1402), random.uniform(938,961)
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #             random_delay()
-    #             pyautogui.click()
-
-    #             time.sleep(10)
-    #             x,y = random.uniform(542,886), random.uniform(465,491)
-    #             if for_kids == 'Yes':
-    #                 time.sleep(100)
-    #                 y=545
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #             random_delay()
-    #             pyautogui.click()
-
-    #             x,y = random.uniform(542,886), random.uniform(478,460)
-    #             if for_kids == 'Yes':
-                    
-    #                 y=random.uniform(532,548)
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #             random_delay()
-    #             pyautogui.click()
-
-    #             x,y = random.uniform(863,893), random.uniform(553,573)
-    #             if for_kids == 'Yes':
-                    
-    #                 y=random.uniform(633,651)
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #             random_delay()
-    #             pyautogui.click()
-
-    #             x,y = random.uniform(1366,1402), random.uniform(938,961)
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #             random_delay()
-    #             pyautogui.click()
-
-    #             #ad suitability
-    #             ad_suitability()
-
-    #             #######################END SCREEN#############################################
-    #             #video cho trẻ em
-    #             if for_kids == 'Yes': #dont have endscreen 
-    #                 x,y = 1386,955
-    #                 print(f'Move to {x,y}')
-    #                 pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #                 random_delay()
-    #                 pyautogui.click()
-                    
-
-    #             #video không cho trẻ em
-    #             elif for_kids == 'No': # False 
-    #                 #add endscreen
-    #                 add_endscreen(level)
-    #             if level == 1:
-    #                 if for_kids == 'No':
-    #                     #add endscreen
-    #                     x,y = 1381, 955
-    #                     print(f'Move to {x,y}')
-    #                     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #                     pyautogui.click()
-    #                     add_endscreen(level)
-    #                 x,y = 1390, 960
-    #                 print(f'Move to {x,y}')
-    #                 pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #                 pyautogui.click()
-                    
-    #         random_mouse()
-    #         #####################################################################
-
-    #         if level == 3 or level == 4:
-    #             #move to monetization
-    #             x,y = 1385,960
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #             random_delay()
-    #             pyautogui.click()
-                
-    #             if len(add_territories) > 0:
-    #                 time.sleep(random.uniform(1,2))
-    #                 location = pyautogui.locateOnScreen("img_data/specific_territories.png", confidence=0.8)
-    #                 if location:
-    #                     x, y = pyautogui.center(location) 
-    #                     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
-    #                     print(x,y)
-    #                     random_delay()
-    #                     pyautogui.click()
-
-    #                 x = random.uniform(627,1307)
-    #                 y += random.uniform(120,128)
-    #                 print(f'Move to {x,y}')
-    #                 pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #                 pyautogui.click()
-
-    #                 time.sleep(1)
-    #                 pyperclip.copy(add_territories)
-    #                 random_delay()
-    #                 pyautogui.hotkey('ctrl','v')
-
-            
-
-
-    #             x,y = 1434,478
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #             random_delay()
-    #             pyautogui.mouseDown()
-    #             pyautogui.moveTo(x, y+600, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #             pyautogui.mouseUp()
-
-    #             if len(add_territories) >0:
-    #                 x,y = random.uniform(609, 800),544
-    #                 print(f'Move to {x,y}')
-    #                 pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #                 pyautogui.click()
-
-    #             random_mouse()
-    #             x,y = 687,842
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #             pyautogui.click()
-    #             pyperclip.copy(title)
-    #             random_delay()
-    #             pyautogui.hotkey('ctrl','v')
-
-
-    #             x,y = 1376,946
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #             pyautogui.click()
-    #             time.sleep(random.uniform(1,2))
-    #             pyautogui.click()
-    #             random_delay()
-                
-    #             #ad suitability
-    #             ad_suitability()
-
-                
-                
-    #             #######################END SCREEN#############################################
-    #             #video cho trẻ em
-    #             if for_kids == 'Yes': #dont have endscreen 
-    #                 x,y = 1386,955
-    #                 print(f'Move to {x,y}')
-    #                 pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #                 random_delay()
-    #                 pyautogui.click()
-                    
-
-    #             #video không cho trẻ em
-    #             elif for_kids == 'No': # False 
-    #                 #add endscreen
-    #                 add_endscreen(level)
-    #             if level == 1:
-    #                 if for_kids == 'No':
-    #                     #add endscreen
-    #                     x,y = 1381, 955
-    #                     print(f'Move to {x,y}')
-    #                     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #                     pyautogui.click()
-    #                     add_endscreen(level)
-    #                 x,y = 1390, 960
-    #                 print(f'Move to {x,y}')
-    #                 pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #                 pyautogui.click()
-                    
-    #         random_mouse()
-    #         #####################################################################
-    #         #next
-    #         x,y = 1390, 960
-    #         print(f'Move to {x,y}')
-    #         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #         pyautogui.click()
-    #         random_delay(1,2)
-    #         print(f'Move to {x,y}')
-    #         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    #         pyautogui.click()
-
-    #         #public stattus = không công khai
-            
-    #         x,y = 591, 532
-    #         print(f'Move to {x,y}')
-    #         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #         pyautogui.click()
-
-            
+            #related video
+            related_vids()
+            #publish status
+            go_to_visibility()
 
     #         if str(publish_hour) != 'nan':
 
@@ -365,12 +167,12 @@ def main(sheet_idx):
     #         # except Exception as e:
     #         #     print("Khong tim thay cua so mo ra:", e)
 
-    #         #update_exxcel
-    #         full_df.at[idx, 'status'] = 'Uploaded'       
+            #update_exxcel
+            full_df.at[idx, 'status'] = 'Uploaded'       
         
             
-    #         full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
-    #         random_mouse()
+            full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
+            random_mouse()
         except Exception as e:
             print(f"Lỗi xảy ra: {e}")
 
@@ -378,9 +180,9 @@ def main(sheet_idx):
 
         
 
-    # #update sheet
-    # excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
-    # return count
+    #update sheet
+    excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
+    return count
         
 if __name__ == "__main__":
         
