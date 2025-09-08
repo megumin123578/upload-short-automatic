@@ -12,6 +12,34 @@ import webbrowser
 from bs4 import BeautifulSoup
 import math
 
+
+def clean_path(p: str) -> str:
+    """Làm sạch path lấy từ sheet/Excel để dùng được trên Windows."""
+    if p is None:
+        return ""
+    s = str(p).strip()
+
+    # bỏ BOM/zero-width & ký tự vô hình phổ biến
+    for z in ["\ufeff", "\u200b", "\u200c", "\u200d", "\u2060"]:
+        s = s.replace(z, "")
+
+    # bỏ ngoặc kép/ngoặc đơn bao ngoài nếu có
+    if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
+        s = s[1:-1]
+    else:
+        s = s.strip('"').strip("'")
+
+    # chuẩn hoá slashes & bỏ dấu chấm/khoảng trắng cuối (Windows không cho phép)
+    s = s.replace("/", "\\").rstrip(" .")
+
+    # chuẩn UNC: // -> \\ ; tránh thừa backslash
+    if s.startswith("//"):
+        s = "\\" + s  # -> "\/..." rồi thay tiếp
+    if s.startswith("\\/"):
+        s = s.replace("\\/", "\\", 1)
+    return s
+
+
 def excel_to_sheet(excel_file, sheet_file, worksheet_index):
     df = pd.read_excel(excel_file, engine="openpyxl")
 
@@ -40,24 +68,8 @@ def excel_to_sheet(excel_file, sheet_file, worksheet_index):
     print(f"Đã ghi nội dung vào worksheet index {worksheet_index} trong '{sheet_file}'.")
 
 
-def get_thumbnail_dir(folder_path):
-    if not os.path.exists(folder_path):
-        print(f"Thư mục {folder_path} không tồn tại!")
-        return None
-
-    image_extensions = ('.png', '.jpg', '.jpeg')
-
-    image_files = [f for f in os.listdir(folder_path) if f.lower().endswith(image_extensions)]
-
-    if len(image_files) == 1:
-        return image_files[0]  
-    else:
-        print(f"Thư mục không chứa file ảnh (.png, .jpg, .jpeg).")
-        return None
 def random_delay(min_sec = 0.5, max_sec = 1):
     time.sleep(random.uniform(min_sec, max_sec))
-
-
 
 def off_set_(x, y, delta=5):
     rand_x = x + random.randint(-delta, delta)
@@ -66,11 +78,9 @@ def off_set_(x, y, delta=5):
     pyautogui.click()
 
 
-def convert_date(input_date):
+def convert_date(input_date): #vietnamese date
     date_splited = input_date.split('/')
-
     pl_date = f'{date_splited[0]} thg {date_splited[1]}, 20{date_splited[2]}'
-
     return pl_date
 
 def clear_excel_file(excel_file):
@@ -82,16 +92,12 @@ def clear_excel_file(excel_file):
     except Exception as e:
         print(f"Error clearing Excel file '{excel_file}': {e}")
 
-
-
-
-
 def pre_process_data(file):
     df = pd.read_excel(file)
     df.columns = df.columns.str.strip()  # bỏ khoảng trắng 2 đầu
     df.columns = df.columns.str.replace('\u200b', '', regex=True)  # nếu có ký tự ẩn
     required = [
-        'Channel','Title','Description','output directory','Thumbnail',
+        'Channel','Title','Description','video directory',
         'Publish hour','Publish date'
     ]
     missing = [c for c in required if c not in df.columns]
@@ -100,7 +106,7 @@ def pre_process_data(file):
                         f"Check header spelling/casing/whitespace.")
     filtered_df = df[
         df['Channel'].notna() &
-        df['output directory'].notna() &
+        df['video directory'].notna() &
         df['status'].str.lower().eq('upload')
     ]
     return filtered_df, df
@@ -360,3 +366,132 @@ def random_mouse(so_vong=None, ban_kinh=None, toc_do=0.01, huong=None, huong_xoa
         r_hien_tai = max(r_hien_tai, 0)
 
     pyautogui.moveTo(random.uniform(500,999), random.uniform(500,999),duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad)
+
+def upload_vid_to_right_channel(tag_name):
+    x,y = random.uniform(836,945),random.uniform(648,676)
+    print(f"Move to ({x}, {y})")
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
+    pyautogui.click()
+    random_delay()  
+    random_mouse()
+
+    time.sleep(5)
+    
+
+    x_channel, y_channel = select_channel(tag_name,28) ###select_channel###
+    #turn off dev tool and select right channel
+    pyautogui.hotkey('f12')
+    print(f"Move to ({x_channel}, {y_channel})")
+    pyautogui.moveTo(x_channel, y_channel, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
+    pyautogui.click()
+    
+    x,y = random.uniform(1237,1289), random.uniform(620,645)
+    print(f"Move to ({x}, {y})")
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
+    random_delay() 
+    pyautogui.click()
+        
+    random_delay(3,4)
+
+    #go to studio
+    x,y =1856,148
+    print(f"Move to ({x}, {y})")
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
+    pyautogui.click()
+    random_delay(4,5)
+
+    
+    location = pyautogui.locateOnScreen("img_data/yt_studio.png", confidence=0.8)
+    if location:
+        left, top, width, height = location
+        x = random.randint(left, left + width -5)
+        y = random.randint(top, top + height - 5)
+        print(x, y)
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
+        pyautogui.click()
+    random_delay()
+
+    time.sleep(5)
+
+    location = pyautogui.locateOnScreen("img_data/create_button.png", confidence=0.7)
+    if location:
+        x,y = pyautogui.center(location)
+        print(x, y)
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
+        pyautogui.click()
+    
+    y = random.uniform(193,207)
+    print(f'move to: {x, y}')
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
+    pyautogui.click()
+
+    choose_vid_x, choose_vid_y = 960, 540
+    print(f'Move to {choose_vid_x, choose_vid_y}')
+    pyautogui.moveTo(choose_vid_x, choose_vid_y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
+    random_delay()
+    pyautogui.click()
+    random_delay()
+
+
+def insert_title_and_description(title, description):
+    # Title
+    pyautogui.hotkey("ctrl", "a")
+    random_delay()
+
+    # if title is NaN or empty
+    is_nan = (isinstance(title, float) and pd.isna(title)) or (str(title).strip().lower() == 'nan') or (str(title).strip() == '')
+
+    if is_nan:
+        # Lấy text default
+        print('Chưa đặt title, dùng title mặc định của kênh')
+    else:
+        # Dán title mới
+        pyperclip.copy(str(title))
+        random_delay()
+        pyautogui.hotkey("ctrl", "v")
+
+    time.sleep(2)
+    #move to description with tab
+    pyautogui.hotkey('tab')
+    random_delay()
+    pyautogui.hotkey('tab')
+    pyperclip.copy(str(title))
+    random_delay()
+    pyautogui.hotkey("ctrl", "a")
+    random_delay(0.4, 0.5)
+    pyautogui.hotkey("ctrl", "v")
+
+def add_to_playlist():
+    #scroll max
+    time.sleep(2)
+    x,y = 1434,478
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+    random_delay()
+    pyautogui.click()
+    random_delay()
+    pyautogui.mouseDown()
+    pyautogui.moveTo(x, y+999, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
+    pyautogui.mouseUp()
+    
+        #open playlist select
+    x,y = 650,410
+    print(f'Move to {x,y}')
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
+    random_delay()
+    pyautogui.click()
+        #check box
+    x,y = 560,400
+    for _ in range(numbers_of_playist):
+        print(f'Move to {x,y}')
+        time.sleep(random.uniform(1, 2))
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
+        random_delay()
+        pyautogui.click()
+        
+        y+=32
+        #done
+    random_mouse()
+    x,y = 881,742
+    print(f'Move to {x,y}')
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
+    pyautogui.click()

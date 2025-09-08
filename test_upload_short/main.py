@@ -1,9 +1,6 @@
 import pyautogui
-import webbrowser
 import time
-import os
 import pyperclip
-from pywinauto import Application
 import gspread
 from google.oauth2.service_account import Credentials
 import pandas as pd
@@ -22,7 +19,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
-CREDS_FILE = 'sheet.json'
+CREDS_FILE = r"C:\Users\Admin\Documents\main\Tuan_number\main_folder\sheet.json"
 SHEET_NAME = "Auto_concat_vids"
 
 
@@ -50,39 +47,29 @@ def main(sheet_idx):
     for idx, row in filtered_df.iterrows():
         title = row['Title']
         description = row['Description']
-        output_dir = row['output directory']
+        vid_dir = row['video directory']
         channel = row['Channel']
-        # publish_state = row['Publish state']
         thumbnail = row['Thumbnail']
-
-        KIDS_CHANNELS = {"Thomas & Friends World"}  
-        for_kids = 'Yes' if str(channel).strip() in KIDS_CHANNELS else 'No'
-        monetization = 'Yes'
-
         publish_hour = row['Publish hour']
         publish_date = row['Publish date']
-        print(f'Working on: title: {title}, description: {description}, video_directory: {output_dir}, channel: {channel}, thumbnail: {thumbnail}, ')
-        print(f"Monetization: {monetization}")
-        print(f"For kids: {for_kids}")
+        print(f'Working on: title: {title}, description: {description}, video_directory: {vid_dir}, channel: {channel}, thumbnail: {thumbnail}, ')
+
         try:
             #false url
             youtube_url = 'https://studio.youtube.com/channel/UCnZVD65a5zSsmrDwzs9uzEg'
+
             #handle channel url
             channel_df = pd.read_csv('channel_data.csv')
             config = channel_df[channel_df['channel'] == channel].iloc[0]
-            
             #asign value
             tag_name = config['tag_name']
             numbers_of_playist = int(config['numbers_of_playlist'])
-            add_territories = config['add_territories'] if pd.notna(config['add_territories']) else ""
-            level = int(config['level'])
-            confirm_login = config['confirm_login']
+            
             access_yt_channel(youtube_url)
 
-            
-            folder, filename = split_dir(output_dir) #file mp4 location
+            folder, filename = split_dir(vid_dir) #file mp4 location
             video_path = get_video_path(folder) 
-            folder, filename = split_dir(video_path) #reasign value
+            folder, filename = split_dir(video_path)
 
             #go to channel select page
             x,y = random.uniform(836,945),random.uniform(648,676)
@@ -592,18 +579,7 @@ def main(sheet_idx):
 if __name__ == "__main__":
         
     while True:
-        for sheet_index in range(5):
-            count = main(sheet_index)
-            safe_count = count if isinstance(count, int) and count > 0 else 0
-            for _ in range(safe_count):
-                time.sleep(60)
-                pyautogui.hotkey('ctrl','w')
-                random_delay()
-                pyautogui.hotkey('esc')
-                time.sleep(15)
-                pyautogui.hotkey('ctrl','w')
-                random_delay()
-                pyautogui.hotkey('esc')
-            print("Start sleep", datetime.now())
-            time.sleep(60)
-            print("End sleep", datetime.now())
+        main(5)
+        print("Start sleep", datetime.now())
+        time.sleep(60)
+        print("End sleep", datetime.now())

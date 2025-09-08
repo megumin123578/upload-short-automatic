@@ -1,0 +1,12 @@
+x,y = random.uniform(550,1020), random.uniform(585,596)
+print(f'Move to {x, y}')
+pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
+random_delay()
+pyautogui.click()
+pyautogui.hotkey('ctrl','a')
+random_delay()
+pyautogui.hotkey('ctrl','c')
+text = pyperclip.paste()
+if str(description) != 'nan':
+    pyperclip.copy(description)
+    pyautogui.hotkey('ctrl','v')
