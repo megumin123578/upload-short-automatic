@@ -46,3 +46,7 @@ Thumbs.db
 logs/
 *.log
 tmp/
+auto_upload_short/sheet.json
+*credentials*.json
+*service*account*.json
+*secret*.json
