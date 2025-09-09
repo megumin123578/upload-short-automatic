@@ -295,7 +295,7 @@ def select_channel(channel_tag, total_channel):
         
         x += 300 #move x to third col
         pyautogui.hotkey('ctrl','shift','c')
-        random_delay(0.1,0.2) 
+        random_delay() 
         print(f"Move to ({x}, {y})")
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
         pyautogui.click()
@@ -310,7 +310,7 @@ def select_channel(channel_tag, total_channel):
         x -= 600 #move x to first col
         y+= 63  #move y to next row
         pyautogui.hotkey('ctrl','shift','c')
-        random_delay(0.1,0.2) 
+        random_delay() 
         print(f"Move to ({x}, {y})")
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
         pyautogui.click()
@@ -494,8 +494,7 @@ def add_to_playlist(numbers_of_playist):
     pyautogui.click()
 
 def go_to_visibility():
-    random_mouse()
-    time.sleep(5)
+    random_delay(0.2,0.4)
     next_section()
 
 def related_vids():
@@ -517,6 +516,7 @@ def related_vids():
         pyautogui.hotkey('tab')
 
     pyautogui.hotkey('enter')
+    time.sleep(2)
     next_section()
 def _is_missing(v):
     if v is None:
@@ -535,43 +535,47 @@ def publish(publish_hour, publish_date):
     if not _is_missing(publish_hour):
 
         #schedule
-        x,y = random.uniform(546,1041), random.uniform(602,670)
+        x,y = random.uniform(1006,1036), random.uniform(623,652)
         print(f'Move to {x,y}') #date
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
         pyautogui.click()
         
-        random_delay(0.1,0.2)
+        random_delay()
         pyautogui.hotkey('tab')
-        random_delay(0.1,0.2)
+        random_delay()
         pyautogui.hotkey('enter')
+        random_delay()
         pyperclip.copy(to_mmm_d_yyyy(publish_date))
         pyautogui.hotkey('ctrl','a')
         pyautogui.hotkey('ctrl','v')
         pyautogui.hotkey('enter')
 
-        random_delay(0.1,0.2)
+        random_delay()
         pyautogui.hotkey('tab')
-        random_delay(0.1,0.2)
+        random_delay()
         pyautogui.hotkey('tab')
         pyperclip.copy(publish_hour)
+        random_delay()
         pyautogui.hotkey('ctrl','a')
-        random_delay(0.1,0.2)
+        random_delay()
         pyautogui.hotkey('ctrl','v')
-        random_delay(0.1,0.2)
+        random_delay()
         pyautogui.hotkey('enter')
         random_delay()
-        next_section() # publish
 
-        for _ in range(3):
-            random_delay(0.1,0.2)
-            pyautogui.hotkey('tab')
-        pyautogui.hotkey('enter')
+        #get url and close
+        x,y = random.uniform(1340,1364), random.uniform(600,630)
+        print(f'Move to {x,y}')
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+        random_delay()
+        pyautogui.click()
+        random_delay()
         url = pyperclip.paste()
-
+        next_section() # publish
         #close
-        for _ in range(2):
-            random_delay(0.1,0.2)
-            pyautogui.hotkey('tab')
+        random_delay()
+        pyautogui.hotkey('tab')
+        random_delay()
         pyautogui.hotkey('enter')
 
 
