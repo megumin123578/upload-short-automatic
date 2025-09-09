@@ -11,6 +11,8 @@ import pyperclip
 import webbrowser
 from bs4 import BeautifulSoup
 import math
+from datetime import datetime
+
 
 
 def clean_path(p: str) -> str:
@@ -47,7 +49,7 @@ def excel_to_sheet(excel_file, sheet_file, worksheet_index):
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
-    CREDS_FILE = "sheet.json"
+    CREDS_FILE = r"C:\Users\Admin\Documents\main\Tuan_number\main_folder\sheet.json"
 
     creds = Credentials.from_service_account_file(CREDS_FILE, scopes=SCOPES)
     gc = gspread.authorize(creds)
@@ -82,6 +84,31 @@ def convert_date(input_date): #vietnamese date
     date_splited = input_date.split('/')
     pl_date = f'{date_splited[0]} thg {date_splited[1]}, 20{date_splited[2]}'
     return pl_date
+
+_MONTH_ABBR = ["", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+import re
+def to_mmm_d_yyyy(s: str, dayfirst: bool = False) -> str:
+    """
+    - dayfirst=False: ưu tiên mm/dd/yyyy
+    - dayfirst=True : ưu tiên dd/mm/yyyy
+    """
+    x = str(s).strip().strip('"').strip("'")
+    x = re.sub(r"[.\-]", "/", x)  # chuẩn hóa dấu phân cách
+
+    fmts_pref = ("%d/%m/%Y", "%m/%d/%Y") if dayfirst else ("%m/%d/%Y", "%d/%m/%Y")
+    fmts = fmts_pref + ("%Y/%m/%d",)
+
+    dt = None
+    for fmt in fmts:
+        try:
+            dt = datetime.strptime(x, fmt)
+            break
+        except ValueError:
+            continue
+    if dt is None:
+        raise ValueError(f"Không parse được ngày: {s}")
+
+    return f"{_MONTH_ABBR[dt.month]} {dt.day}, {dt.year}"
 
 def clear_excel_file(excel_file):
     try:
@@ -193,15 +220,16 @@ def choose_file(folder_dir, file_name):
         time.sleep(5)
         ##########################################################################
     
-def ad_suitability():
-
+def next_section():
     x,y = random.uniform(1369,1401), random.uniform(940,955)
     print(f'Move to {x,y}')
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
     random_delay()
     pyautogui.click()
 
+def ad_suitability():
 
+    next_section()
     random_delay()
     #ad suitability
     x, y =1434, 399
@@ -230,11 +258,7 @@ def ad_suitability():
 
     time.sleep(random.uniform(3,3.5))
 
-    x,y = random.uniform(1369,1401), random.uniform(940,955)
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    random_delay()
-    pyautogui.click()
+    next_section()
     random_mouse()
 
 def get_tag_name(html):
@@ -257,7 +281,7 @@ def select_channel(channel_tag, total_channel):
         x += 300 #move x to seccond col
         pyautogui.hotkey('ctrl','shift','c') # == f12
         time.sleep(1)
-        random_delay(1,2 )
+        random_delay(0.1,0.2 )
         print(f"Move to ({x}, {y})")
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
         pyautogui.click()
@@ -271,7 +295,7 @@ def select_channel(channel_tag, total_channel):
         
         x += 300 #move x to third col
         pyautogui.hotkey('ctrl','shift','c')
-        random_delay(1,2) 
+        random_delay(0.1,0.2) 
         print(f"Move to ({x}, {y})")
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
         pyautogui.click()
@@ -286,7 +310,7 @@ def select_channel(channel_tag, total_channel):
         x -= 600 #move x to first col
         y+= 63  #move y to next row
         pyautogui.hotkey('ctrl','shift','c')
-        random_delay(1,2) 
+        random_delay(0.1,0.2) 
         print(f"Move to ({x}, {y})")
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
         pyautogui.click()
@@ -431,8 +455,7 @@ def insert_title_and_description(title, description):
         pyperclip.copy(str(description))
         pyautogui.hotkey("ctrl", "v")
 
-def add_to_playlist(numbers_of_playist):
-    #scroll max
+def scroll_max():
     time.sleep(2)
     x,y = 1434,478
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
@@ -442,6 +465,10 @@ def add_to_playlist(numbers_of_playist):
     pyautogui.mouseDown()
     pyautogui.moveTo(x, y+999, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
     pyautogui.mouseUp()
+
+def add_to_playlist(numbers_of_playist):
+    #scroll max
+    scroll_max()
     
         #open playlist select
     x,y = 650,410
@@ -500,8 +527,68 @@ def related_vids():
     pyautogui.hotkey('enter')
     
     #move to next setion
-    x,y = random.uniform(1369,1401), random.uniform(940,955)
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    random_delay()
-    pyautogui.click()
+    next_section()
+
+def _is_missing(v):
+    if v is None:
+        return True
+    if isinstance(v, float) and math.isnan(v):
+        return True
+    if isinstance(v, str) and v.strip().lower() in ("", "nan", "none"):
+        return True
+    return False
+
+def publish(publish_hour, publish_date):
+    if not _is_missing(publish_hour):
+        
+        scroll_max()
+
+        #schedule
+        x,y = random.uniform(546,1041), random.uniform(602,670)
+        print(f'Move to {x,y}') #date
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+        pyautogui.click()
+        
+        random_delay(0.1,0.2)
+        pyautogui.hotkey('tab')
+        random_delay(0.1,0.2)
+        pyautogui.hotkey('enter')
+        pyperclip.copy(to_mmm_d_yyyy(publish_date))
+        pyautogui.hotkey('ctrl','a')
+        pyautogui.hotkey('ctrl','v')
+        pyautogui.hotkey('enter')
+
+        random_delay(0.1,0.2)
+        pyautogui.hotkey('tab')
+        random_delay(0.1,0.2)
+        pyautogui.hotkey('tab')
+        pyperclip.copy(publish_hour)
+        pyautogui.hotkey('ctrl','a')
+        random_delay(0.1,0.2)
+        pyautogui.hotkey('ctrl','v')
+        random_delay(0.1,0.2)
+        pyautogui.hotkey('enter')
+        random_delay()
+        next_section() # publish
+
+        for _ in range(3):
+            random_delay(0.1,0.2)
+            pyautogui.hotkey('tab')
+        pyautogui.hotkey('enter')
+        url = pyperclip.paste()
+
+        #close
+        for _ in range(2):
+            random_delay(0.1,0.2)
+            pyautogui.hotkey('tab')
+        pyautogui.hotkey('enter')
+
+
+    else:
+        x,y = random.uniform(1340,1364), random.uniform(600,630)
+        print(f'Move to {x,y}')
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+        random_delay()
+        pyautogui.click()
+        url = pyperclip.paste()
+    return url

@@ -51,7 +51,7 @@ def main(sheet_idx):
         channel = row['Channel']
         publish_hour = row['Publish hour']
         publish_date = row['Publish date']
-        print(f'Working on: title: {title}, description: {description}, video_directory: {vid_dir}, channel: {channel}')
+        print(f'Working on: title: {title}, description: {description}, video_directory: {vid_dir}, channel: {channel}, publish hour: {publish_hour}, publish date: {publish_date}')
 
         try:
             #false url
@@ -85,92 +85,12 @@ def main(sheet_idx):
             #publish status
             go_to_visibility()
 
-    #         if str(publish_hour) != 'nan':
-
-    #             #scroll
-    #             x,y = 1435,463
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #             pyautogui.mouseDown()
-    #             print(f'Move to {x,y+300}')
-    #             pyautogui.moveTo(x, y+300, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #             pyautogui.mouseUp()
-
-    #             #schedule
-    #             x,y = 755, 645
-    #             print(f'Move to {x,y}') #date
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #             pyautogui.click()
-                
-    #             x,y = 695, 580
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #             pyautogui.click()
-    #             pyperclip.copy(convert_date(publish_date))
-    #             pyautogui.hotkey('ctrl','a')
-    #             pyautogui.hotkey('ctrl','v')
-    #             pyautogui.hotkey('enter')
-
-    #             x, y = 772, 574 #hour
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #             pyautogui.click()
-    #             pyperclip.copy(publish_hour)
-    #             pyautogui.hotkey('ctrl','a')
-    #             pyautogui.hotkey('ctrl','v')
-    #             pyautogui.hotkey('enter')
-    #             #Done
-    #             x,y = 1375,960
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    #             pyautogui.click()
-
-
-    #             x,y = 1115,675
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=0.2, tween=pyautogui.easeInOutQuad)
-    #             time.sleep(random.uniform(1,2))
-    #             pyautogui.click()
-
-    #         else:
-    #             x,y = random.uniform(1385,1407), random.uniform(186,206)
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=0.2, tween=pyautogui.easeInOutQuad)
-    #             time.sleep(random.uniform(1,2))
-    #             pyautogui.click()
-
-    #             x,y = random.uniform(1108,1177), random.uniform(631,659)
-    #             print(f'Move to {x,y}')
-    #             pyautogui.moveTo(x, y, duration=0.2, tween=pyautogui.easeInOutQuad)
-    #             time.sleep(random.uniform(1,2))
-    #             pyautogui.click()
-    #         #     x,y = 1384,944
-    #         #     print(f'Move to {x,y}')
-    #         #     pyautogui.moveTo(x, y, duration=0.2, tween=pyautogui.easeInOutQuad)
-    #         #     time.sleep(random.uniform(1,2))
-    #         #     pyautogui.click()
-
-    #         # # handling pop up after upload
-    #         # time.sleep(2)
-    #         # try:
-    #         #     location = pyautogui.locateOnScreen('img_data/popup.PNG', confidence=0.7)
-    #         #     if location:
-    #         #         x,y = pyautogui.center(location)
-    #         #         x+=69
-    #         #         y+= 108
-    #         #         print(f'Move to {x,y}')
-    #         #         pyautogui.moveTo(x, y, duration=0.2, tween=pyautogui.easeInOutQuad)
-    #         #         time.sleep(random.uniform(1,2))
-    #         #         pyautogui.click()
-    #         #     else:
-    #         #         print("keep running")
-    #         # except Exception as e:
-    #         #     print("Khong tim thay cua so mo ra:", e)
+            random_delay()
+            url = publish(publish_hour,publish_date)
 
             #update_exxcel
-            full_df.at[idx, 'status'] = 'Uploaded'       
-        
-            
+            full_df.at[idx, 'status'] = 'Uploaded' 
+            full_df.at[idx, 'URL'] = url      
             full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
             random_mouse()
         except Exception as e:
@@ -191,3 +111,8 @@ if __name__ == "__main__":
         print("Start sleep", datetime.now())
         time.sleep(60)
         print("End sleep", datetime.now())
+        pyautogui.hotkey('ctrl','w')
+        random_delay()
+        pyautogui.hotkey('ctrl','w')
+        random_delay()
+        pyautogui.hotkey('esc')
