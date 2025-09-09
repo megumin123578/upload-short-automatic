@@ -495,40 +495,29 @@ def add_to_playlist(numbers_of_playist):
 
 def go_to_visibility():
     random_mouse()
-    #next
-    x,y = 1390, 960
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    pyautogui.click()
-    random_delay(1,2)
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    pyautogui.click()
+    time.sleep(5)
+    next_section()
 
 def related_vids():
-    random_delay()
 
+    random_delay()
+    #select add
     x,y = random.uniform(1329,1361), random.uniform(473,493)
     print(f'Move to {x,y}')
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
     random_delay()
     pyautogui.click()
 
-    #tab until reach first video == 4 tabs
     for _ in range(4):
         pyautogui.hotkey('tab')
         random_delay()
 
-    #random 10 newest vids 0,2
     for _ in range(random.randint(0,10)):
         random_delay()
         pyautogui.hotkey('tab')
-    #select
-    pyautogui.hotkey('enter')
-    
-    #move to next setion
-    next_section()
 
+    pyautogui.hotkey('enter')
+    next_section()
 def _is_missing(v):
     if v is None:
         return True
@@ -539,9 +528,11 @@ def _is_missing(v):
     return False
 
 def publish(publish_hour, publish_date):
+    time.sleep(2)
+    scroll_max()
+    print(f'publish_hour is empty: {_is_missing(publish_hour)}')
+    print(f'publish_date is empty: {_is_missing(publish_date)}')
     if not _is_missing(publish_hour):
-        
-        scroll_max()
 
         #schedule
         x,y = random.uniform(546,1041), random.uniform(602,670)
@@ -590,5 +581,7 @@ def publish(publish_hour, publish_date):
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
         random_delay()
         pyautogui.click()
+        random_delay()
         url = pyperclip.paste()
+        next_section()
     return url

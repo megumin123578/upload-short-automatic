@@ -90,7 +90,10 @@ def main(sheet_idx):
 
             #update_exxcel
             full_df.at[idx, 'status'] = 'Uploaded' 
-            full_df.at[idx, 'URL'] = url      
+            
+            full_df['URL'] = full_df['URL'].astype('string')
+            full_df.at[idx, 'URL'] = url
+    
             full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
             random_mouse()
         except Exception as e:
