@@ -170,10 +170,6 @@ def access_yt_channel(url, chrome_profile_path = "Profile 18"):
     
     time.sleep(4.5)
 
-def get_video_path(folder_dir): #get video inside folder path -- > handle changed file name case
-    exts = {'.mp4','.mkv','.avi','.mov','.flv','.webm','.m4v'}
-    return next((p for p in Path(folder_dir).iterdir() if p.is_file() and p.suffix.lower() in exts), None)
-
 
 def split_dir(dir):
     #split_dir folder and filename
@@ -208,7 +204,7 @@ def choose_file(folder_dir, file_name):
         pyperclip.copy(file_name)
         pyautogui.hotkey("ctrl", "v")
         pyautogui.hotkey("enter")
-        random_delay(2,3)
+        time.sleep(7)
 
         #select file
         select_x, select_y = 303,156
@@ -260,6 +256,7 @@ def ad_suitability():
 
     next_section()
     random_mouse()
+    
 
 def get_tag_name(html):
     soup = BeautifulSoup(html, 'html.parser')
@@ -515,13 +512,13 @@ def go_to_visibility():
     random_delay(0.2,0.4)
     next_section()
 
-def related_vids(channel):
+def related_vids(level):
     #select add
-    if channel != 'zzTESTzz':
+    random_delay()
+    if level == 1:
         x,y = random.uniform(1329,1361), random.uniform(473,493)
     else:
         x,y = random.uniform(1329,1361), random.uniform(423,453)
-    random_delay()
     print(f'Move to {x,y}')
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
     random_delay()

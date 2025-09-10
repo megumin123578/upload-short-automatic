@@ -1,6 +1,3 @@
-from module import *
-_MONTH_ABBR = ["", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-
 import pyautogui
 import time
 import pyperclip
@@ -26,6 +23,12 @@ CREDS_FILE = r"C:\Users\Admin\Documents\main\Tuan_number\main_folder\sheet.json"
 SHEET_NAME = "Auto_concat_vids"
 
 
+# Cấu hình PyAutoGUI
+pyautogui.FAILSAFE = True  
+pyautogui.PAUSE = 0.2
+
+timeout = 15 #max 15s wait browser
+
 def main(sheet_idx):
     try:
         creds = Credentials.from_service_account_file(CREDS_FILE, scopes=SCOPES)
@@ -43,9 +46,15 @@ def main(sheet_idx):
 
     for idx, row in filtered_df.iterrows():
         vid_dir = clean_path(row['video directory'])
+        channel = row['Channel']
+        
 
-        folder, filename = split_dir(vid_dir) #file mp4 location
-        video_path = get_video_path(folder) 
-        print("DEBUG video_path =", video_path)
+        
+        #handle channel url
+        channel_df = pd.read_csv('short_channels.csv')
+        config = channel_df[channel_df['channel'] == channel].iloc[0]
+        right_manager = config['right_manager']
+    
+        print(right_manager)
 
 main(5)

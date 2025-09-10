@@ -1,6 +1,16 @@
-channel,tag_name,numbers_of_playlist
-Amazing Slime,@AmazingSlime169,2
-zzTESTzz,@zztestzz2763,6
-Unboxing Toys,@UnboxingToys26,1
+channel,tag_name,numbers_of_playlist,right_manager,related_vid_level
+Amazing Slime,@AmazingSlime169,2,false,1
+zzTESTzz,@zztestzz2763,6,false,2
+Unboxing Toys,@UnboxingToys26,1,false,1
+Loopy Toys ASMR,@LoopyToysASMR,1,false,1
+Mushroom Toy Unboxing,@MushroomToyUnboxing,2,true,2
+999 ASMR Toys,@999ASMRToys,2,false,1
+Funny Crushing Experiment,@funnycrushingexperiment3996,6,false,1
+HP Crunchy,@jonjon0776,3,false,1
+Slime ASMR World,@SlimeASMRWorld-h4e,2,false,1
+Slime Squishing,@SlimeSquishing,1,false,1
+Relaxing Squishy,@RelaxingSlime95,4,false,1
+
+
 
 

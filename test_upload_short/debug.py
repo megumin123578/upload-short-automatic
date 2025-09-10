@@ -63,14 +63,13 @@ def main(sheet_idx):
             #asign value
             tag_name = config['tag_name']
             numbers_of_playist = int(config['numbers_of_playlist'])
+            right_manager = config['right_manager']
+            level = config['related_vid_level']
             
             access_yt_channel(youtube_url)
-
-            folder, filename = split_dir(vid_dir) #file mp4 location
-            video_path = get_video_path(folder) 
-            print("DEBUG video_path =", video_path)
-            folder, filename = split_dir(video_path)
-
+     
+            print("DEBUG video_path =", vid_dir)
+            folder, filename = split_dir(vid_dir)
 
             #go to channel select page
             upload_vid_to_right_channel(tag_name)
@@ -79,12 +78,14 @@ def main(sheet_idx):
             insert_title_and_description(channel, title, description)
 
             add_to_playlist(channel, numbers_of_playist)
+            if right_manager == True:
+                next_section()
 
             if channel != 'zzTESTzz':
                 ad_suitability()
 
             #related video
-            related_vids(channel)
+            related_vids(level)
             #publish status
             go_to_visibility()
 
@@ -99,7 +100,6 @@ def main(sheet_idx):
             full_df['URL'] = full_df['URL'].astype('string')
             full_df.at[idx, 'URL'] = url
 
-            
     
             full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
             random_mouse()
@@ -115,9 +115,11 @@ def main(sheet_idx):
         random_delay()
         pyautogui.hotkey('esc')
         
-
+    if count > 0:
     #update sheet
-    excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
+        excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
+    else:
+        time.sleep(60)
     
         
 if __name__ == "__main__":
