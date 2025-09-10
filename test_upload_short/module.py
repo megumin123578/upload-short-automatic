@@ -12,6 +12,8 @@ import webbrowser
 from bs4 import BeautifulSoup
 import math
 from datetime import datetime
+import subprocess
+import time
 
 
 
@@ -87,7 +89,7 @@ def convert_date(input_date): #vietnamese date
 
 _MONTH_ABBR = ["", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 import re
-def to_mmm_d_yyyy(s: str, dayfirst: bool = False) -> str:
+def to_mmm_d_yyyy(s: str, dayfirst: bool = True) -> str:
     """
     - dayfirst=False: ưu tiên mm/dd/yyyy
     - dayfirst=True : ưu tiên dd/mm/yyyy
@@ -156,8 +158,7 @@ def copy_from_ggsheet_to_excel(gspread_client, sheet_name, excel_file, idx):
     except Exception as e:
         print(f"Error copying data from Google Sheet to Excel: {e}")
 
-import subprocess
-import time
+
 
 def access_yt_channel(url, chrome_profile_path = "Profile 18"):
     print(f"Mở trình duyệt và truy cập: {url}")
@@ -229,8 +230,7 @@ def next_section():
 
 def ad_suitability():
 
-    next_section()
-    random_delay()
+
     #ad suitability
     x, y =1434, 399
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
@@ -390,18 +390,13 @@ def upload_vid_to_right_channel(tag_name):
     print(f"Move to ({x}, {y})")
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
     pyautogui.click()
-    random_delay(6)
+    time.sleep(6)
 
-    
     location = pyautogui.locateOnScreen("img_data/yt_studio.png", confidence=0.7)
-    if location:
-        left, top, width, height = location
-        x = random.randint(left, left + width -5)
-        y = random.randint(top, top + height - 5)
-        print(x, y)
-        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-        pyautogui.click()
-    random_delay()
+    x,y = pyautogui.center(location)
+    print(x, y)
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
+    pyautogui.click()
 
     time.sleep(6)
 
@@ -425,7 +420,8 @@ def upload_vid_to_right_channel(tag_name):
     random_delay()
 
 
-def insert_title_and_description(title, description):
+def insert_title_and_description(channel, title, description):
+    
     # Title
     pyautogui.hotkey("ctrl", "a")
     random_delay()
@@ -443,6 +439,20 @@ def insert_title_and_description(title, description):
         pyautogui.hotkey("ctrl", "v")
 
     time.sleep(2)
+    if channel == 'zzTESTzz':
+        for _ in range(3):
+            pyautogui.hotkey('tab')
+            random_delay()
+        pyautogui.hotkey('enter')
+        random_delay()
+        pyautogui.hotkey('enter')
+
+        x,y = random.uniform(541,1046), random.uniform(396,417)
+        print(f'Move to {x,y}')
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+        random_delay()
+        pyautogui.click()
+
     #move to description with tab
     pyautogui.hotkey('tab')
     random_delay()
@@ -466,7 +476,7 @@ def scroll_max():
     pyautogui.moveTo(x, y+999, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
     pyautogui.mouseUp()
 
-def add_to_playlist(numbers_of_playist):
+def add_to_playlist(channel, numbers_of_playist):
     #scroll max
     scroll_max()
     
@@ -476,32 +486,42 @@ def add_to_playlist(numbers_of_playist):
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
     random_delay()
     pyautogui.click()
+
         #check box
-    x,y = 560,400
-    for _ in range(numbers_of_playist):
-        print(f'Move to {x,y}')
-        time.sleep(random.uniform(0.5, 0.7))
-        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
+    if channel == 'zzTESTzz': #pass through search
         random_delay(0.2,0.3)
-        pyautogui.click()
-        
-        y+=32
-        #done
-    random_mouse()
-    x,y = 881,742
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad) 
-    pyautogui.click()
+        pyautogui.hotkey('tab')
+
+    random_delay(0.2,0.3)
+    pyautogui.hotkey('tab')
+    for _ in range(numbers_of_playist):
+        pyautogui.hotkey('enter')
+        random_delay(0.2,0.3)
+        pyautogui.hotkey('down')
+        random_delay(0.2,0.3)
+
+    #done
+    random_delay(0.2,0.3)
+    pyautogui.hotkey('tab')
+    random_delay(0.2,0.3)
+    pyautogui.hotkey('tab')
+    random_delay(0.2,0.3)
+    pyautogui.hotkey('enter')
+
+    random_delay()
+    next_section()
 
 def go_to_visibility():
     random_delay(0.2,0.4)
     next_section()
 
-def related_vids():
-
-    random_delay()
+def related_vids(channel):
     #select add
-    x,y = random.uniform(1329,1361), random.uniform(473,493)
+    if channel != 'zzTESTzz':
+        x,y = random.uniform(1329,1361), random.uniform(473,493)
+    else:
+        x,y = random.uniform(1329,1361), random.uniform(423,453)
+    random_delay()
     print(f'Move to {x,y}')
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
     random_delay()
@@ -527,6 +547,12 @@ def _is_missing(v):
         return True
     return False
 
+def is_url(s: str) -> bool:
+    pattern = re.compile(
+        r'^(https?://[^\s/$.?#].[^\s]*)$', re.IGNORECASE
+    )
+    return bool(pattern.match(s))
+
 def publish(publish_hour, publish_date):
     time.sleep(2)
     scroll_max()
@@ -547,15 +573,19 @@ def publish(publish_hour, publish_date):
         random_delay()
         pyperclip.copy(to_mmm_d_yyyy(publish_date))
         pyautogui.hotkey('ctrl','a')
+        random_delay()
         pyautogui.hotkey('ctrl','v')
+        random_delay()
         pyautogui.hotkey('enter')
-
-        random_delay()
-        pyautogui.hotkey('tab')
-        random_delay()
-        pyautogui.hotkey('tab')
+        
+        #publish hour
         pyperclip.copy(publish_hour)
         random_delay()
+        x,y = random.uniform(742,836), random.uniform(595,609)
+        print(f'Move to {x,y}')
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+        random_delay()
+        pyautogui.click()
         pyautogui.hotkey('ctrl','a')
         random_delay()
         pyautogui.hotkey('ctrl','v')

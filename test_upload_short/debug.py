@@ -68,31 +68,38 @@ def main(sheet_idx):
 
             folder, filename = split_dir(vid_dir) #file mp4 location
             video_path = get_video_path(folder) 
+            print("DEBUG video_path =", video_path)
             folder, filename = split_dir(video_path)
+
 
             #go to channel select page
             upload_vid_to_right_channel(tag_name)
             choose_file(folder, filename)
 
-            insert_title_and_description(title, description)
+            insert_title_and_description(channel, title, description)
 
-            add_to_playlist(numbers_of_playist)
+            add_to_playlist(channel, numbers_of_playist)
 
-            ad_suitability()
+            if channel != 'zzTESTzz':
+                ad_suitability()
 
             #related video
-            related_vids()
+            related_vids(channel)
             #publish status
             go_to_visibility()
 
             random_delay()
             url = publish(publish_hour,publish_date)
-
+            if is_url(url):
             #update_exxcel
-            full_df.at[idx, 'status'] = 'Uploaded' 
+                full_df.at[idx, 'status'] = 'Uploaded' 
+            else:
+                full_df.at[idx, 'status'] = 'Failed' 
             
             full_df['URL'] = full_df['URL'].astype('string')
             full_df.at[idx, 'URL'] = url
+
+            
     
             full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
             random_mouse()
@@ -100,22 +107,21 @@ def main(sheet_idx):
             print(f"Lỗi xảy ra: {e}")
 
             traceback.print_exc()
-
         
-
-    #update sheet
-    excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
-    return count
-        
-if __name__ == "__main__":
-        
-    while True:
-        main(5)
-        print("Start sleep", datetime.now())
         time.sleep(60)
-        print("End sleep", datetime.now())
         pyautogui.hotkey('ctrl','w')
         random_delay()
         pyautogui.hotkey('ctrl','w')
         random_delay()
         pyautogui.hotkey('esc')
+        
+
+    #update sheet
+    excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
+    
+        
+if __name__ == "__main__":
+        
+    while True:
+        main(5)
+        

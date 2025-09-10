@@ -51,71 +51,82 @@ def main(sheet_idx):
         channel = row['Channel']
         publish_hour = row['Publish hour']
         publish_date = row['Publish date']
-        print(f'Working on: title: {title}, description: {description}, video_directory: {vid_dir}, channel: {channel}, publish hour: {publish_hour}, publish date: {publish_date}')
+        print(f'Working on: {title}, {vid_dir}, {channel}, {publish_hour}, {publish_date}')
 
-        try:
-            #false url
-            youtube_url = 'https://studio.youtube.com/channel/UCnZVD65a5zSsmrDwzs9uzEg'
+        success = False  # cờ theo dõi kết quả
 
-            #handle channel url
-            channel_df = pd.read_csv('short_channels.csv')
-            config = channel_df[channel_df['channel'] == channel].iloc[0]
-            #asign value
-            tag_name = config['tag_name']
-            numbers_of_playist = int(config['numbers_of_playlist'])
+        for attempt in range(2):  # tối đa 2 lần
+            try:
+                youtube_url = 'https://studio.youtube.com/channel/UCnZVD65a5zSsmrDwzs9uzEg'
+
+                # lấy config channel
+                channel_df = pd.read_csv('short_channels.csv')
+                config = channel_df[channel_df['channel'] == channel].iloc[0]
+                tag_name = config['tag_name']
+                numbers_of_playist = int(config['numbers_of_playlist'])
+
+                access_yt_channel(youtube_url)
+
+                folder, filename = split_dir(vid_dir)
+                video_path = get_video_path(folder) 
+                folder, filename = split_dir(video_path)
+
+                upload_vid_to_right_channel(tag_name)
+                choose_file(folder, filename)
+
+                insert_title_and_description(title, description)
+                add_to_playlist(numbers_of_playist)
+                ad_suitability()
+                related_vids()
+                go_to_visibility()
+
+                random_delay()
+                url = publish(publish_hour, publish_date)
+
+                full_df['URL'] = full_df['URL'].astype('string')
+
+                if is_url(url):
+                    full_df.at[idx, 'status'] = 'Uploaded'
+                    full_df.at[idx, 'URL'] = url
+                    success = True
+                    print(f"Upload thành công ở lần thử {attempt+1}")
+                    break  # ra khỏi vòng retry
+                else:
+                    raise ValueError("Publish không trả về URL hợp lệ")
+
+            except Exception as e:
+                print(f"Lỗi xảy ra lần {attempt+1}: {e}")
+                traceback.print_exc()
+                if attempt == 0:
+                    print("Thử lại upload một lần nữa...")
+                else:
+                    full_df.at[idx, 'status'] = 'Failed'
+
+            finally:
+                # lưu excel sau mỗi lần thử
+                full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
+                random_mouse()
             
-            access_yt_channel(youtube_url)
-
-            folder, filename = split_dir(vid_dir) #file mp4 location
-            video_path = get_video_path(folder) 
-            folder, filename = split_dir(video_path)
-
-            #go to channel select page
-            upload_vid_to_right_channel(tag_name)
-            choose_file(folder, filename)
-
-            insert_title_and_description(title, description)
-
-            add_to_playlist(numbers_of_playist)
-
-            ad_suitability()
-
-            #related video
-            related_vids()
-            #publish status
-            go_to_visibility()
-
+            time.sleep(60)
+            pyautogui.hotkey('ctrl','w')
             random_delay()
-            url = publish(publish_hour,publish_date)
+            pyautogui.hotkey('ctrl','w')
+            random_delay()
+            pyautogui.hotkey('esc')
+                
 
-            #update_exxcel
-            full_df.at[idx, 'status'] = 'Uploaded' 
-            
-            full_df['URL'] = full_df['URL'].astype('string')
-            full_df.at[idx, 'URL'] = url
-    
-            full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
-            random_mouse()
-        except Exception as e:
-            print(f"Lỗi xảy ra: {e}")
+    if not success:
+        print(f"Video {title} thất bại sau 2 lần thử")
 
-            traceback.print_exc()
 
         
 
     #update sheet
     excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
-    return count
+    
         
 if __name__ == "__main__":
         
     while True:
         main(5)
-        print("Start sleep", datetime.now())
-        time.sleep(60)
-        print("End sleep", datetime.now())
-        pyautogui.hotkey('ctrl','w')
-        random_delay()
-        pyautogui.hotkey('ctrl','w')
-        random_delay()
-        pyautogui.hotkey('esc')
+

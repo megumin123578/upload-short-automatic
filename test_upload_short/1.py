@@ -1,46 +1,51 @@
-import random
-import pyautogui
-import pyperclip
 from module import *
+_MONTH_ABBR = ["", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 
-time.sleep(3)
-#schedule
-x,y = random.uniform(1006,1036), random.uniform(623,670)
-print(f'Move to {x,y}') #date
-pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-pyautogui.click()
+import pyautogui
+import time
+import pyperclip
+import gspread
+from google.oauth2.service_account import Credentials
+import pandas as pd
+import random
+import traceback
+from module import *
+from datetime import datetime
+import sys
 
-random_delay(0.1,0.2)
-pyautogui.hotkey('tab')
-random_delay(0.1,0.2)
-pyautogui.hotkey('enter')
-pyperclip.copy(to_mmm_d_yyyy("10/9/2025"))
-pyautogui.hotkey('ctrl','a')
-pyautogui.hotkey('ctrl','v')
-pyautogui.hotkey('enter')
+# Đảm bảo stdout/stderr là UTF-8 và không vỡ chương trình vì ký tự lạ
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-random_delay(0.1,0.2)
-pyautogui.hotkey('tab')
-random_delay(0.1,0.2)
-pyautogui.hotkey('tab')
-pyperclip.copy("10:30")
-pyautogui.hotkey('ctrl','a')
-random_delay(0.1,0.2)
-pyautogui.hotkey('ctrl','v')
-random_delay(0.1,0.2)
-pyautogui.hotkey('enter')
-random_delay()
-next_section() # publish
+EXCEL_FILE = 'temp_upload.xlsx'
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+CREDS_FILE = r"C:\Users\Admin\Documents\main\Tuan_number\main_folder\sheet.json"
+SHEET_NAME = "Auto_concat_vids"
 
 
-for _ in range(3):
-    random_delay(0.1,0.2)
-    pyautogui.hotkey('tab')
-pyautogui.hotkey('enter')
-url = pyperclip.paste()
+def main(sheet_idx):
+    try:
+        creds = Credentials.from_service_account_file(CREDS_FILE, scopes=SCOPES)
+        gc = gspread.authorize(creds)
+        copy_from_ggsheet_to_excel(gc, SHEET_NAME, EXCEL_FILE, sheet_idx)
 
-#close
-for _ in range(2):
-    random_delay(0.1,0.2)
-    pyautogui.hotkey('tab')
-pyautogui.hotkey('enter')
+        filtered_df, full_df = pre_process_data(EXCEL_FILE)
+        count = len(filtered_df)
+        print(f'There are {count} videos need to be upload')
+        
+
+    except Exception as e:
+        print(f"Error in main execution: {e}")
+        return
+
+    for idx, row in filtered_df.iterrows():
+        vid_dir = clean_path(row['video directory'])
+
+        folder, filename = split_dir(vid_dir) #file mp4 location
+        video_path = get_video_path(folder) 
+        print("DEBUG video_path =", video_path)
+
+main(5)
