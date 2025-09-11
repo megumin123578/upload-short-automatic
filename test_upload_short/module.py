@@ -600,6 +600,13 @@ def publish(publish_hour, publish_date):
         url = pyperclip.paste()
         next_section() # publish
         #close
+
+        x,y = random.uniform(760,1154), random.uniform(681,692)
+        print(f'Move to {x,y}')
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+        random_delay()
+        pyautogui.click()
+        
         random_delay()
         pyautogui.hotkey('tab')
         random_delay()
