@@ -96,6 +96,7 @@ def main(sheet_idx):
             full_df.at[idx, 'status'] = 'Uploaded' 
 
             full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
+            excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
             random_mouse()
         except Exception as e:
             print(f"Lỗi xảy ra: {e}")
@@ -103,8 +104,8 @@ def main(sheet_idx):
             full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
             traceback.print_exc()
 
-        excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
-        time.sleep(60)
+        
+        time.sleep(5)
         pyautogui.hotkey('ctrl','w')
         random_delay()
         pyautogui.hotkey('ctrl','w')

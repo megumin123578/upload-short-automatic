@@ -516,7 +516,7 @@ def add_to_playlist(channel, numbers_of_playist):
 
 def go_to_visibility():
     random_delay(0.2,0.4)
-    time.sleep(60)
+    time.sleep(100)
     next_section()
 
 def related_vids(level):
@@ -586,7 +586,7 @@ def publish(publish_hour, publish_date):
 
         next_section() # publish
         #close
-
+        time.sleep(3)
         click(760,1154,681,692)
         
         random_delay()
