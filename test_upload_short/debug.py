@@ -119,7 +119,7 @@ def main(sheet_idx):
     #update sheet
         excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
     else:
-        time.sleep(60)
+        time.sleep(200)
     
         
 if __name__ == "__main__":
