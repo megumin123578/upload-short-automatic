@@ -15,7 +15,12 @@ from datetime import datetime
 import subprocess
 import time
 
-
+def click(x1,x2,y1,y2):
+    x,y = random.uniform(x1,x2), random.uniform(y1,y2)
+    print(f'Move to {x,y}')
+    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+    random_delay()
+    pyautogui.click()
 
 def clean_path(p: str) -> str:
     """Làm sạch path lấy từ sheet/Excel để dùng được trên Windows."""
@@ -43,6 +48,9 @@ def clean_path(p: str) -> str:
         s = s.replace("\\/", "\\", 1)
     return s
 
+def ends_with_tag(text: str) -> bool:
+    text = text.strip()
+    return bool(re.search(r"(?:^|\s)(#[\w]+)$", text))
 
 def excel_to_sheet(excel_file, sheet_file, worksheet_index):
     df = pd.read_excel(excel_file, engine="openpyxl")
@@ -218,22 +226,12 @@ def choose_file(folder_dir, file_name):
         ##########################################################################
     
 def next_section():
-    x,y = random.uniform(1369,1401), random.uniform(940,955)
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    random_delay()
-    pyautogui.click()
+    click(1369,1401,940,955)
 
 def ad_suitability():
 
-
     #ad suitability
-    x, y =1434, 399
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    pyautogui.mouseDown()
-    pyautogui.moveTo(x, y+800, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    pyautogui.mouseUp()
-    time.sleep(random.uniform(1,2))
+    scroll_max()
 
     location = pyautogui.locateOnScreen("img_data/confirm_content.png", confidence=0.7)
     if location:
@@ -358,10 +356,7 @@ def random_mouse(so_vong=None, ban_kinh=None, toc_do=0.01, huong=None, huong_xoa
     pyautogui.moveTo(random.uniform(500,999), random.uniform(500,999),duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad)
 
 def upload_vid_to_right_channel(tag_name):
-    x,y = random.uniform(836,945),random.uniform(648,676)
-    print(f"Move to ({x}, {y})")
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
-    pyautogui.click()
+    click(836,945,648,676)
     random_delay()  
     random_mouse()
     random_delay()
@@ -374,11 +369,7 @@ def upload_vid_to_right_channel(tag_name):
     pyautogui.moveTo(x_channel, y_channel, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
     pyautogui.click()
     
-    x,y = random.uniform(1237,1289), random.uniform(620,645)
-    print(f"Move to ({x}, {y})")
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
-    random_delay() 
-    pyautogui.click()
+    click(1237,1289,620,645)
         
     random_delay(3,4)
 
@@ -419,6 +410,9 @@ def upload_vid_to_right_channel(tag_name):
 
 def insert_title_and_description(channel, title, description):
     
+    #reuse - chose the second one
+
+
     # Title
     pyautogui.hotkey("ctrl", "a")
     random_delay()
@@ -437,25 +431,27 @@ def insert_title_and_description(channel, title, description):
 
     time.sleep(2)
     if channel == 'zzTESTzz':
-        for _ in range(3):
+        loop_nums = 3
+        if ends_with_tag(title):
+            loop_nums += 1
+        for _ in range(loop_nums):
             pyautogui.hotkey('tab')
             random_delay()
         pyautogui.hotkey('enter')
         random_delay()
         pyautogui.hotkey('enter')
 
-        x,y = random.uniform(541,1046), random.uniform(396,417)
-        print(f'Move to {x,y}')
-        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-        random_delay()
-        pyautogui.click()
+        click(541,1046,396,417)
 
     #move to description with tab
-    pyautogui.hotkey('tab')
     random_delay()
-    pyautogui.hotkey('tab')
-    pyperclip.copy(str(title))
-    random_delay()
+    loop_nums = 2
+    if ends_with_tag(title):
+            loop_nums += 1
+    for _ in range(loop_nums):
+        pyautogui.hotkey('tab')
+        random_delay()
+    
     pyautogui.hotkey("ctrl", "a")
     random_delay(0.4, 0.5)
     if len(str(description)) > 5:
@@ -516,13 +512,10 @@ def related_vids(level):
     #select add
     random_delay()
     if level == 1:
-        x,y = random.uniform(1329,1361), random.uniform(473,493)
+        click(1329,1361,473,493)
     else:
-        x,y = random.uniform(1329,1361), random.uniform(423,453)
-    print(f'Move to {x,y}')
-    pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-    random_delay()
-    pyautogui.click()
+        click(1329,1361,423,453)
+        
 
     for _ in range(4):
         pyautogui.hotkey('tab')
@@ -553,16 +546,10 @@ def is_url(s: str) -> bool:
 def publish(publish_hour, publish_date):
     time.sleep(2)
     scroll_max()
-    print(f'publish_hour is empty: {_is_missing(publish_hour)}')
-    print(f'publish_date is empty: {_is_missing(publish_date)}')
     if not _is_missing(publish_hour):
 
         #schedule
-        x,y = random.uniform(1006,1036), random.uniform(623,652)
-        print(f'Move to {x,y}') #date
-        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-        pyautogui.click()
-        
+        click(1006,1036,623,652)
         random_delay()
         pyautogui.hotkey('tab')
         random_delay()
@@ -578,11 +565,7 @@ def publish(publish_hour, publish_date):
         #publish hour
         pyperclip.copy(publish_hour)
         random_delay()
-        x,y = random.uniform(742,836), random.uniform(595,609)
-        print(f'Move to {x,y}')
-        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-        random_delay()
-        pyautogui.click()
+        click(742,836,595,609)
         pyautogui.hotkey('ctrl','a')
         random_delay()
         pyautogui.hotkey('ctrl','v')
@@ -591,34 +574,21 @@ def publish(publish_hour, publish_date):
         random_delay()
 
         #get url and close
-        x,y = random.uniform(1340,1364), random.uniform(600,630)
-        print(f'Move to {x,y}')
-        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-        random_delay()
-        pyautogui.click()
+        click(1340,1364,600,630)
         random_delay()
         url = pyperclip.paste()
         next_section() # publish
         #close
 
-        x,y = random.uniform(760,1154), random.uniform(681,692)
-        print(f'Move to {x,y}')
-        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-        random_delay()
-        pyautogui.click()
+        click(760,1154,681,692)
         
         random_delay()
         pyautogui.hotkey('tab')
         random_delay()
         pyautogui.hotkey('enter')
 
-
     else:
-        x,y = random.uniform(1340,1364), random.uniform(600,630)
-        print(f'Move to {x,y}')
-        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
-        random_delay()
-        pyautogui.click()
+        click(1340,1364,600,630)
         random_delay()
         url = pyperclip.paste()
         next_section()

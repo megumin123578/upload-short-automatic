@@ -62,7 +62,7 @@ def main(sheet_idx):
             config = channel_df[channel_df['channel'] == channel].iloc[0]
             #asign value
             tag_name = config['tag_name']
-            numbers_of_playist = int(config['numbers_of_playlist'])
+            
             right_manager = config['right_manager']
             level = config['related_vid_level']
             
@@ -75,9 +75,9 @@ def main(sheet_idx):
             upload_vid_to_right_channel(tag_name)
             choose_file(folder, filename)
 
+            #start
             insert_title_and_description(channel, title, description)
 
-            add_to_playlist(channel, numbers_of_playist)
             if right_manager == True:
                 next_section()
 
