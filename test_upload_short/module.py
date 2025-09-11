@@ -28,20 +28,16 @@ def clean_path(p: str) -> str:
         return ""
     s = str(p).strip()
 
-    # bỏ BOM/zero-width & ký tự vô hình phổ biến
     for z in ["\ufeff", "\u200b", "\u200c", "\u200d", "\u2060"]:
         s = s.replace(z, "")
 
-    # bỏ ngoặc kép/ngoặc đơn bao ngoài nếu có
     if (s.startswith('"') and s.endswith('"')) or (s.startswith("'") and s.endswith("'")):
         s = s[1:-1]
     else:
         s = s.strip('"').strip("'")
 
-    # chuẩn hoá slashes & bỏ dấu chấm/khoảng trắng cuối (Windows không cho phép)
     s = s.replace("/", "\\").rstrip(" .")
 
-    # chuẩn UNC: // -> \\ ; tránh thừa backslash
     if s.startswith("//"):
         s = "\\" + s  # -> "\/..." rồi thay tiếp
     if s.startswith("\\/"):
@@ -83,20 +79,12 @@ def excel_to_sheet(excel_file, sheet_file, worksheet_index):
 def random_delay(min_sec = 0.5, max_sec = 1):
     time.sleep(random.uniform(min_sec, max_sec))
 
-def off_set_(x, y, delta=5):
-    rand_x = x + random.randint(-delta, delta)
-    rand_y = y + random.randint(-delta, delta)
-    pyautogui.moveTo(rand_x, rand_y, duration=random.uniform(0.2, 0.5))
-    pyautogui.click()
-
-
+_MONTH_ABBR = ["", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+import re
 def convert_date(input_date): #vietnamese date
     date_splited = input_date.split('/')
     pl_date = f'{date_splited[0]} thg {date_splited[1]}, 20{date_splited[2]}'
     return pl_date
-
-_MONTH_ABBR = ["", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-import re
 def to_mmm_d_yyyy(s: str, dayfirst: bool = True) -> str:
     """
     - dayfirst=False: ưu tiên mm/dd/yyyy
@@ -212,7 +200,7 @@ def choose_file(folder_dir, file_name):
         pyperclip.copy(file_name)
         pyautogui.hotkey("ctrl", "v")
         pyautogui.hotkey("enter")
-        time.sleep(7)
+        time.sleep(2)
 
         #select file
         select_x, select_y = 303,156
@@ -270,12 +258,16 @@ def select_channel(channel_tag, total_channel):
     first_channel = [453,287]
     x,y = first_channel[0], first_channel[1]
     
-
+    first_time = 1
     for _ in range(total_channel):
 
         x += 300 #move x to seccond col
-        pyautogui.hotkey('ctrl','shift','c') # == f12
-        time.sleep(1)
+        pyautogui.hotkey('ctrl','shift','c')
+        if first_time == 1:
+            time.sleep(3)
+            first_time -= 1
+        else:
+            time.sleep(1)
         random_delay(0.1,0.2 )
         print(f"Move to ({x}, {y})")
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
@@ -356,6 +348,7 @@ def random_mouse(so_vong=None, ban_kinh=None, toc_do=0.01, huong=None, huong_xoa
     pyautogui.moveTo(random.uniform(500,999), random.uniform(500,999),duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad)
 
 def upload_vid_to_right_channel(tag_name):
+
     click(836,945,648,676)
     random_delay()  
     random_mouse()
@@ -410,9 +403,25 @@ def upload_vid_to_right_channel(tag_name):
 
 def insert_title_and_description(channel, title, description):
     
-    #reuse - chose the second one
-
-
+    #reuse 
+    click(961,1047,372,395)
+    random_delay()
+    #chose the second one
+    click(701,826,378,533)
+    random_delay()
+    #done
+    location = pyautogui.locateOnScreen("img_data/reuse.png", confidence=0.7)
+    if location:
+        x, y = pyautogui.center(location) 
+        x += random.uniform(20,50)
+        pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+        pyautogui.click()
+    random_mouse()
+    
+    random_delay()
+    for _ in range(3):
+        pyautogui.hotkey('tab')
+        random_delay()
     # Title
     pyautogui.hotkey("ctrl", "a")
     random_delay()
@@ -421,10 +430,8 @@ def insert_title_and_description(channel, title, description):
     is_nan = (isinstance(title, float) and pd.isna(title)) or (str(title).strip().lower() == 'nan') or (str(title).strip() == '')
 
     if is_nan:
-        # Lấy text default
         print('Chưa đặt title, dùng title mặc định của kênh')
     else:
-        # Dán title mới
         pyperclip.copy(str(title))
         random_delay()
         pyautogui.hotkey("ctrl", "v")
@@ -457,6 +464,8 @@ def insert_title_and_description(channel, title, description):
     if len(str(description)) > 5:
         pyperclip.copy(str(description))
         pyautogui.hotkey("ctrl", "v")
+    
+    next_section()
 
 def scroll_max():
     time.sleep(2)
@@ -573,10 +582,6 @@ def publish(publish_hour, publish_date):
         pyautogui.hotkey('enter')
         random_delay()
 
-        #get url and close
-        click(1340,1364,600,630)
-        random_delay()
-        url = pyperclip.paste()
         next_section() # publish
         #close
 
@@ -588,8 +593,4 @@ def publish(publish_hour, publish_date):
         pyautogui.hotkey('enter')
 
     else:
-        click(1340,1364,600,630)
-        random_delay()
-        url = pyperclip.paste()
         next_section()
-    return url

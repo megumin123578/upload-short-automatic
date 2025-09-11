@@ -24,7 +24,7 @@ SHEET_NAME = "Auto_concat_vids"
 
 
 # Cấu hình PyAutoGUI
-pyautogui.FAILSAFE = True  
+pyautogui.FAILSAFE = True   
 pyautogui.PAUSE = 0.2
 
 timeout = 15 #max 15s wait browser
