@@ -59,4 +59,57 @@ time.sleep(3)
 # insert_title_and_description(channel, title, description)
 # related_vids(level)
 
-click(1340,1364,600,630)
+def _is_missing(v):
+    if v is None:
+        return True
+    if isinstance(v, float) and math.isnan(v):
+        return True
+    if isinstance(v, str) and v.strip().lower() in ("", "nan", "none"):
+        return True
+    return False
+
+def publish(publish_hour, publish_date):
+    time.sleep(2)
+    scroll_max()
+    if not _is_missing(publish_hour):
+
+        #schedule
+        click(1006,1036,623,652)
+        random_delay()
+        pyautogui.hotkey('tab')
+        random_delay()
+        pyautogui.hotkey('enter')
+        random_delay()
+        pyperclip.copy(to_mmm_d_yyyy(publish_date))
+        pyautogui.hotkey('ctrl','a')
+        random_delay()
+        pyautogui.hotkey('ctrl','v')
+        random_delay()
+        pyautogui.hotkey('enter')
+        
+        #publish hour
+        pyperclip.copy(publish_hour)
+        random_delay()
+        click(742,836,595,609)
+        pyautogui.hotkey('ctrl','a')
+        random_delay()
+        pyautogui.hotkey('ctrl','v')
+        random_delay()
+        pyautogui.hotkey('enter')
+        random_delay()
+
+        next_section() # publish
+        #close
+
+        click(760,1154,681,692)
+        
+        random_delay()
+        pyautogui.hotkey('tab')
+        random_delay()
+        pyautogui.hotkey('enter')
+
+    else:
+        next_section()
+
+
+publish('11:20','12/9/2025')

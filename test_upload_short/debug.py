@@ -86,7 +86,7 @@ def main(sheet_idx):
 
             #related video
             related_vids(level)
-            #publish status
+            #publish statuse
             go_to_visibility()
 
             random_delay()

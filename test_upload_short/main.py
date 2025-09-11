@@ -24,7 +24,7 @@ SHEET_NAME = "Auto_concat_vids"
 
 
 # Cấu hình PyAutoGUI
-pyautogui.FAILSAFE = True   
+pyautogui.FAILSAFE = True  
 pyautogui.PAUSE = 0.2
 
 timeout = 15 #max 15s wait browser
@@ -51,10 +51,11 @@ def main(sheet_idx):
         channel = row['Channel']
         publish_hour = row['Publish hour']
         publish_date = row['Publish date']
-        print(f'Working on: title: {title}, description: {description}, video_directory: {vid_dir}, channel: {channel}, publish hour: {publish_hour}, publish date: {publish_date}')
+        # print(f'Working on: title: {title}, description: {description}, video_directory: {vid_dir}, channel: {channel}, publish hour: {publish_hour}, publish date: {publish_date}')
 
         try:
             #false url
+
             youtube_url = 'https://studio.youtube.com/channel/UCnZVD65a5zSsmrDwzs9uzEg'
 
             #handle channel url
@@ -62,7 +63,9 @@ def main(sheet_idx):
             config = channel_df[channel_df['channel'] == channel].iloc[0]
             #asign value
             tag_name = config['tag_name']
-            numbers_of_playist = int(config['numbers_of_playlist'])
+            
+            right_manager = config['right_manager']
+            level = config['related_vid_level']
             
             access_yt_channel(youtube_url)
      
@@ -73,38 +76,34 @@ def main(sheet_idx):
             upload_vid_to_right_channel(tag_name)
             choose_file(folder, filename)
 
+            #start
             insert_title_and_description(channel, title, description)
 
-            add_to_playlist(channel, numbers_of_playist)
+            if right_manager == True:
+                next_section()
 
             if channel != 'zzTESTzz':
                 ad_suitability()
 
             #related video
-            related_vids(channel)
-            #publish status
+            related_vids(level)
+            #publish statuse
             go_to_visibility()
 
             random_delay()
-            url = publish(publish_hour,publish_date)
-            if is_url(url):
-            #update_exxcel
-                full_df.at[idx, 'status'] = 'Uploaded' 
-            else:
-                full_df.at[idx, 'status'] = 'Failed' 
-            
-            full_df['URL'] = full_df['URL'].astype('string')
-            full_df.at[idx, 'URL'] = url
+            publish(publish_hour,publish_date)
 
-            
-    
+            full_df.at[idx, 'status'] = 'Uploaded' 
+
             full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
             random_mouse()
         except Exception as e:
             print(f"Lỗi xảy ra: {e}")
-
+            full_df.at[idx, 'status'] = 'Failed' 
+            full_df.to_excel(EXCEL_FILE, index=False, engine='openpyxl')
             traceback.print_exc()
-        
+
+        excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
         time.sleep(60)
         pyautogui.hotkey('ctrl','w')
         random_delay()
@@ -114,11 +113,10 @@ def main(sheet_idx):
         
     if count > 0:
     #update sheet
-        excel_to_sheet(EXCEL_FILE, SHEET_NAME,sheet_idx)
+        print(f'Uploaded {count} videos')
     else:
-        time.sleep(60)
-    
-        
+        time.sleep(200)
+
 if __name__ == "__main__":
         
     while True:

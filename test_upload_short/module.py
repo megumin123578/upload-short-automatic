@@ -221,7 +221,7 @@ def ad_suitability():
     #ad suitability
     scroll_max()
 
-    location = pyautogui.locateOnScreen("img_data/confirm_content.png", confidence=0.7)
+    location = pyautogui.locateOnScreen(r"C:\Users\Admin\Documents\dev\upload-short\test_upload_short\img_data\confirm_content.png", confidence=0.7)
     if location:
         x, y = pyautogui.center(location) 
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
@@ -230,7 +230,7 @@ def ad_suitability():
     random_delay()
 
     #send submit
-    location = pyautogui.locateOnScreen("img_data/send_submit.png", confidence=0.8)
+    location = pyautogui.locateOnScreen(r"C:\Users\Admin\Documents\dev\upload-short\test_upload_short\img_data\send_submit.png", confidence=0.8)
     if location:
         x, y = pyautogui.center(location) 
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
@@ -238,7 +238,7 @@ def ad_suitability():
         pyautogui.click()
     random_delay()
 
-    time.sleep(random.uniform(3,3.5))
+    time.sleep(random.uniform(6,7))
 
     next_section()
     random_mouse()
@@ -373,7 +373,7 @@ def upload_vid_to_right_channel(tag_name):
     pyautogui.click()
     time.sleep(6)
 
-    location = pyautogui.locateOnScreen("img_data/yt_studio.png", confidence=0.7)
+    location = pyautogui.locateOnScreen(r"C:\Users\Admin\Documents\dev\upload-short\test_upload_short\img_data\yt_studio.png", confidence=0.7)
     x,y = pyautogui.center(location)
     print(x, y)
     pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad) 
@@ -381,7 +381,7 @@ def upload_vid_to_right_channel(tag_name):
 
     time.sleep(6)
 
-    location = pyautogui.locateOnScreen("img_data/create_button.png", confidence=0.7)
+    location = pyautogui.locateOnScreen(r"C:\Users\Admin\Documents\dev\upload-short\test_upload_short\img_data\create_button.png", confidence=0.7)
     if location:
         x,y = pyautogui.center(location)
         print(x, y)
@@ -408,13 +408,14 @@ def insert_title_and_description(channel, title, description):
     random_delay()
     #chose the second one
     click(701,826,378,533)
-    random_delay()
+    time.sleep(2)
     #done
-    location = pyautogui.locateOnScreen("img_data/reuse.png", confidence=0.7)
+    location = pyautogui.locateOnScreen(r"C:\Users\Admin\Documents\dev\upload-short\test_upload_short\img_data\reuse.png", confidence=0.7)
     if location:
         x, y = pyautogui.center(location) 
         x += random.uniform(20,50)
         pyautogui.moveTo(x, y, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)
+        random_delay()
         pyautogui.click()
     random_mouse()
     
@@ -515,6 +516,7 @@ def add_to_playlist(channel, numbers_of_playist):
 
 def go_to_visibility():
     random_delay(0.2,0.4)
+    time.sleep(60)
     next_section()
 
 def related_vids(level):
