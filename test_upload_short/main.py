@@ -22,12 +22,15 @@ SCOPES = [
 CREDS_FILE = r"C:\Users\Admin\Documents\main\Tuan_number\main_folder\sheet.json"
 SHEET_NAME = "Auto_concat_vids"
 
-
 # Cấu hình PyAutoGUI
 pyautogui.FAILSAFE = True  
 pyautogui.PAUSE = 0.2
 
-timeout = 15 #max 15s wait browser
+timeout = 10 #max 15s wait browser
+
+last_channel = ''
+def same_channel(channel):
+    return last_channel == channel
 
 def main(sheet_idx):
     try:
@@ -56,7 +59,11 @@ def main(sheet_idx):
         try:
             #false url
 
-            youtube_url = 'https://studio.youtube.com/channel/UCnZVD65a5zSsmrDwzs9uzEg'
+            same = same_channel(channel)
+            if same:
+                youtube_url = 'https://www.youtube.com/'
+            else:
+                youtube_url = 'https://studio.youtube.com/channel/UCnZVD65a5zSsmrDwzs9uzEg'
 
             #handle channel url
             channel_df = pd.read_csv('short_channels.csv')
@@ -73,7 +80,8 @@ def main(sheet_idx):
             folder, filename = split_dir(vid_dir)
 
             #go to channel select page
-            upload_vid_to_right_channel(tag_name)
+            upload_vid_to_right_channel(tag_name,same)
+            last_channel = channel #asign new val
             choose_file(folder, filename)
 
             #start
@@ -116,7 +124,7 @@ def main(sheet_idx):
     #update sheet
         print(f'Uploaded {count} videos')
     else:
-        time.sleep(200)
+        time.sleep(100)
 
 if __name__ == "__main__":
         

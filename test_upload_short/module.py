@@ -295,7 +295,7 @@ def select_channel(channel_tag, total_channel):
             return x+275,y
 
         x -= 600 #move x to first col
-        y+= 63  #move y to next row
+        y+= 63.5  #move y to next row
         pyautogui.hotkey('ctrl','shift','c')
         random_delay() 
         print(f"Move to ({x}, {y})")
@@ -347,22 +347,24 @@ def random_mouse(so_vong=None, ban_kinh=None, toc_do=0.01, huong=None, huong_xoa
 
     pyautogui.moveTo(random.uniform(500,999), random.uniform(500,999),duration=random.uniform(0.3,0.5), tween=pyautogui.easeInOutQuad)
 
-def upload_vid_to_right_channel(tag_name):
+def upload_vid_to_right_channel(tag_name,same_channel):
 
-    click(836,945,648,676)
-    random_delay()  
-    random_mouse()
-    random_delay()
+    if same_channel == False:
+        click(836,945,648,676)
+        random_delay()  
+        random_mouse()
+        random_delay()
 
-    x_channel, y_channel = select_channel(tag_name,28) ###select_channel###
-    #turn off dev tool and select right channel
-    pyautogui.hotkey('f12')
-    print(f"Move to ({x_channel}, {y_channel})")
-    random_delay()
-    pyautogui.moveTo(x_channel, y_channel, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
-    pyautogui.click()
+        x_channel, y_channel = select_channel(tag_name,28) ###select_channel###
+        #turn off dev tool and select right channel
+        pyautogui.hotkey('f12')
+        print(f"Move to ({x_channel}, {y_channel})")
+        random_delay()
+        pyautogui.moveTo(x_channel, y_channel, duration=random.uniform(0.3,0.4), tween=pyautogui.easeInOutQuad)  
+        pyautogui.click()
     
-    click(1237,1289,620,645)
+    #popup 
+    # click(1237,1289,620,645)
         
     random_delay(3,4)
 
@@ -400,15 +402,18 @@ def upload_vid_to_right_channel(tag_name):
     pyautogui.click()
     random_delay()
 
-
+higher_reuse_pos = ['zzTESTzz','Mushroom Toy Unboxing','Coco Tiny Craft','Kid Studio']
 def insert_title_and_description(channel, title, description):
     
     #reuse 
-    click(961,1047,372,395)
+    if channel in higher_reuse_pos:
+        click(961,1047,322,348)
+    else:
+        click(961,1047,372,395)
     random_delay()
     #chose the second one
     click(701,826,378,533)
-    time.sleep(2)
+    time.sleep(3)
     #done
     location = pyautogui.locateOnScreen(r"C:\Users\Admin\Documents\dev\upload-short\test_upload_short\img_data\reuse.png", confidence=0.7)
     if location:
